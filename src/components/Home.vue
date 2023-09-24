@@ -389,7 +389,7 @@ const handleFindTicket = () => {
   const valueDate = document.querySelector("#datePick");
   datePicker.value = valueDate.value;
   const dateConvert = new Date(datePicker.value);
-
+  ticketsResult.value = [];
   tickets.value.map(item => {
     for (let i = 0; i < item.data.length; i++) {
       const dateData = new Date(item.data[i].time);

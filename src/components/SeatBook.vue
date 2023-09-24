@@ -55,38 +55,6 @@
                     </table>
                   </div>
 
-                  <!-- <div class="flex flex-col">
-                    <span class="text-sm">Tầng Trên</span>
-                    <table>
-                      <tbody>
-                        <tr
-                          class="flex items-center justify-between gap-1"
-                          v-for="(x, indexR) in row"
-                          :key="indexR"
-                        >
-                          <td
-                            class="relative mt-1 flex justify-center text-center cursor-pointer"
-                            v-for="(y, indexC) in cols"
-                            :key="indexC"
-                          >
-                            <img
-                              :src="getSeatImage(indexC, indexR)"
-                              alt=""
-                              width="32"
-                              v-if="!isAisle(indexC, indexR)"
-                              @click="onSeatSelected(indexC, indexR)"
-                            />
-                            <span
-                              class="absolute text-[10px] font-semibold text-[#A2ABB3] false"
-                            >
-                              {{ getSeatLabel(indexC, indexR) }}
-                            </span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div> -->
-
                   <div
                     class="ml-4 mt-5 flex flex-col gap-4 text-[13px] font-normal"
                   >
@@ -302,19 +270,29 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-
+import { useMessage } from "naive-ui";
 import { useUser } from "../composables/useUser";
 import useCollection from "../composables/useCollection";
+import { doc } from "firebase/firestore";
 const selectedSeat = ref([]);
+const seatPayment = ref([]);
 const row = 6;
 const cols = 5;
-
 const inputHoten = ref("");
 const inputEmail = ref("");
 const inputSDT = ref("");
 const seatInfo = ref({});
 const route = useRoute();
 const date = new Date(route.query.time);
+
+const message = useMessage();
+const err = () => {
+  message.error("Không được chọn quá 5 ghế");
+};
+
+const success = () => {
+  message.success("Đặt vé thành công");
+};
 const isAisle = (c, r) => {
   if (c == 1) {
     if (r >= 0 && r <= 4) {
@@ -338,12 +316,21 @@ const isSeatSelected = (c, r) => {
   );
 };
 
+const isSeatPayment = (c, r) => {
+  return (
+    seatPayment.value.filter(seat => seat.column === c && seat.row === r)
+      .length > 0
+  );
+};
 const getSeatImage = (c, r) => {
   if (isSeatSelected(c, r)) {
     return "../src/assets/img/seat_selecting.svg";
-  } else {
-    return "../src/assets/img/seat_active.svg";
   }
+  if (isSeatPayment(c, r)) {
+    return "../src/assets/img/seat_disabled.svg";
+  }
+
+  return "../src/assets/img/seat_active.svg";
 };
 
 const getSeatLabel = (c, r) => {
@@ -373,12 +360,10 @@ const onSeatSelected = (c, r) => {
     selectedSeat.value = selectedSeat.value.filter(
       seat => !(seat.column === c && seat.row === r)
     );
+  } else if (selectedSeat.value.length < 5) {
+    selectedSeat.value.push({ column: c, row: r, status: "selected" });
   } else {
-    if (selectedSeat.value.length < 5) {
-      selectedSeat.value.push({ column: c, row: r });
-    } else {
-      console.log("da du so ghe");
-    }
+    err();
   }
 
   seatInfo.value = {
@@ -389,6 +374,8 @@ const onSeatSelected = (c, r) => {
 const { getUser } = useUser();
 const { error, addRecord } = useCollection("orders");
 const { user } = getUser();
+
+const handleSeatPayment = () => {};
 const onSubmit = async () => {
   const order = {
     fullName: inputHoten.value,
@@ -398,6 +385,27 @@ const onSubmit = async () => {
     total: totalTicket()
   };
   await addRecord(order);
+  if (selectedSeat.value.length > 0) {
+    seatPayment.value = selectedSeat.value.map(seat => ({
+      ...seat,
+      status: "payment"
+    }));
+  }
+  selectedSeat.value = [];
+  localStorage.setItem("seat-payment", seatPayment.value);
+
+  seatPayment.value.forEach(seat => {
+    const col = seat.column;
+    const row = seat.row;
+    if (isSeatPayment(col, row)) {
+      console.log("thanh cong");
+    }
+  });
+  success();
   console.log(error);
 };
+
+onMounted(() => {
+  localStorage.getItem("seat-payment");
+});
 </script>
