@@ -71,7 +71,7 @@ const logout = () =>
 
 <style scoped>
 .header {
-  background-image: url("../src/assets/img/home_banner.png");
+  background-image: url("https://futabus.vn/images/banners/home_banner.png");
   background-size: cover;
   min-height: 180px;
 }
