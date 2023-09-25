@@ -255,7 +255,7 @@
                   >
                   <div class="flex w-full items-center">
                     <img
-                      src="	https://futabus.vn/images/icons/pickup.svg
+                      src="../assets/img/pickup.svg
 "
                       alt=""
                     />
@@ -267,7 +267,7 @@
                     </span>
                     <span class="flex-1 border-b-2 border-dotted"></span>
                     <img
-                      src="	https://futabus.vn/images/icons/station.svg"
+                      src="../assets/img/station.svg"
                       alt=""
                     />
                   </div>
