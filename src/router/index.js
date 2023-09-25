@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { projectAuth } from "../configs/firebase";
 
 import Home from "../components/Home.vue";
 import Login from "../components/Login.vue";
@@ -9,10 +10,17 @@ import TicketManage from "../components/Admin/Ticketmanage.vue";
 import UserManage from "../components/Admin/Usermanage.vue";
 import OrderMange from "../components/Admin/Ordermanage.vue";
 
+const requireAuth = (to, from, next) => {
+  const user = projectAuth.currentUser;
+  if (!user) next("/login");
+  else next();
+};
+
 const routes = [
   {
     path: "/",
-    component: Home
+    component: Home,
+    beforeEnter: requireAuth
   },
   {
     path: "/login",

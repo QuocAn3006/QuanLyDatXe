@@ -25,18 +25,6 @@
                   <div class="flex w-screen flex-col sm:w-[400px]">
                     <label for="">Điểm đi</label>
                     <div class="w-full py-2 lg:w-auto">
-                      <!-- <div class="flex px-4">
-                        <span
-                          class="ant-input-affix-wrapper input-search w-full placeholder:text-[14px] placeholder:text-[#A2ABB3]"
-                        >
-                          <input
-                            type="text"
-                            class="input-block"
-                            placeholder="Chọn điểm đi"
-                            v-model="provinceSearch1"
-                          />
-                        </span>
-                      </div> -->
                       <div
                         class="min-w-[300px] border-[#F7F7F7] pt-4 mt-2 max-h-[300px] overflow-y-auto border-b-4 sm:max-h-[250px]"
                       >
@@ -89,18 +77,6 @@
                   <div class="flex w-screen flex-col sm:w-[400px]">
                     <label for="">Điểm đến</label>
                     <div class="w-full py-2 lg:w-auto">
-                      <!-- <div class="flex px-4">
-                        <span
-                          class="ant-input-affix-wrapper input-search w-full placeholder:text-[14px] placeholder:text-[#A2ABB3]"
-                        >
-                          <input
-                            type="text"
-                            class="input-block"
-                            placeholder="Chọn điểm đi"
-                            v-model="provinceSearch2"
-                          />
-                        </span>
-                      </div> -->
                       <div
                         class="min-w-[300px] border-[#F7F7F7] pt-4 mt-2 max-h-[300px] overflow-y-auto border-b-4 sm:max-h-[250px]"
                       >
@@ -337,7 +313,7 @@
 </template>
 
 <script setup>
-import { NPopover, NCheckbox } from "naive-ui";
+import { NPopover, NCheckbox, useMessage } from "naive-ui";
 import { onMounted, ref } from "vue";
 import axios from "axios";
 
@@ -345,7 +321,6 @@ import { projectFileStore } from "../configs/firebase";
 import { doc, getDocs, collection, query, where } from "firebase/firestore";
 import { useRouter } from "vue-router";
 const overlap = ref(false);
-
 const datePicker = ref("");
 const dateInPast = ref("");
 const today = new Date().toISOString().split("T")[0];
@@ -359,6 +334,7 @@ const selectedProvince2 = ref(null);
 const ProvincesApi = "https://vn-public-apis.fpo.vn/provinces";
 const router = useRouter();
 
+const message = useMessage();
 axios.get(`${ProvincesApi}/getAll?limit=-1`).then(res => {
   filterProvinces.value = res.data.data.data;
 });
@@ -390,6 +366,7 @@ const handleFindTicket = () => {
   datePicker.value = valueDate.value;
   const dateConvert = new Date(datePicker.value);
   ticketsResult.value = [];
+  let foundTicket = false;
   tickets.value.map(item => {
     for (let i = 0; i < item.data.length; i++) {
       const dateData = new Date(item.data[i].time);
@@ -404,11 +381,13 @@ const handleFindTicket = () => {
           to: item.data[i].to,
           time: dateData
         });
-      } else {
-        console.log("Không có chuyến này");
+        foundTicket = true;
       }
     }
   });
+  if (!foundTicket) {
+    message.error("Hiện chưa có chuyến này ");
+  }
 };
 
 const navigateTo = tick => {

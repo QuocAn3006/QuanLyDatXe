@@ -114,6 +114,7 @@
                         />
                       </span>
                     </div>
+                    <p class="text-red-500">{{ errors.hoTen }}</p>
                   </div>
 
                   <div class="flex flex-col mb-6">
@@ -133,6 +134,7 @@
                         />
                       </span>
                     </div>
+                    <p class="text-red-500">{{ errors.soDT }}</p>
                   </div>
 
                   <div class="flex flex-col mb-6">
@@ -152,6 +154,7 @@
                         />
                       </span>
                     </div>
+                    <p class="text-red-500">{{ errors.email }}</p>
                   </div>
                 </div>
               </form>
@@ -374,35 +377,51 @@ const onSeatSelected = (c, r) => {
 const { getUser } = useUser();
 const { error, addRecord } = useCollection("orders");
 const { user } = getUser();
-
-const handleSeatPayment = () => {};
-const onSubmit = async () => {
-  const order = {
-    fullName: inputHoten.value,
-    phoneNumber: inputSDT.value,
-    email: inputEmail.value,
-    seats: seatInfo.value,
-    total: totalTicket()
-  };
-  await addRecord(order);
-  if (selectedSeat.value.length > 0) {
-    seatPayment.value = selectedSeat.value.map(seat => ({
-      ...seat,
-      status: "payment"
-    }));
+const errors = ref({});
+const formValid = () => {
+  errors.value = {};
+  if (!inputHoten.value) {
+    errors.value.hoTen = "Vui lòng nhập đầy đủ họ tên";
   }
-  selectedSeat.value = [];
-  localStorage.setItem("seat-payment", seatPayment.value);
 
-  seatPayment.value.forEach(seat => {
-    const col = seat.column;
-    const row = seat.row;
-    if (isSeatPayment(col, row)) {
-      console.log("thanh cong");
+  if (!inputSDT.value) {
+    errors.value.soDT = "Vui lòng nhập đầy số điện thoại";
+  }
+
+  if (!inputEmail.value) {
+    errors.value.email = "Vui lòng nhập đầy email";
+  }
+};
+const onSubmit = async () => {
+  formValid();
+
+  if (Object.keys(errors.value).length === 0) {
+    const order = {
+      fullName: inputHoten.value,
+      phoneNumber: inputSDT.value,
+      email: inputEmail.value,
+      seats: seatInfo.value,
+      total: totalTicket()
+    };
+    await addRecord(order);
+    if (selectedSeat.value.length > 0) {
+      seatPayment.value = selectedSeat.value.map(seat => ({
+        ...seat,
+        status: "payment"
+      }));
     }
-  });
-  success();
-  console.log(error);
+    selectedSeat.value = [];
+    localStorage.setItem("seat-payment", seatPayment.value);
+
+    seatPayment.value.forEach(seat => {
+      const col = seat.column;
+      const row = seat.row;
+      if (isSeatPayment(col, row)) {
+        console.log("thanh cong");
+      }
+    });
+    success();
+  }
 };
 
 onMounted(() => {

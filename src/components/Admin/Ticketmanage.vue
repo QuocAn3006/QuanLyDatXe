@@ -254,14 +254,11 @@ const startTime = ref("");
 const updateId = ref("");
 const deleteId = ref("");
 
-const success = () => {
-  message.success("Thêm vé thành công");
-};
 const showModalAdd = ref(false);
 const showModalUpdate = ref(false);
 const ModalUpdate = ref(false);
 const showModalDelete = ref(false);
-const docRef = doc(projectFileStore, "ticket", "DN_SG_TEST");
+const docRef = doc(projectFileStore, "ticket", "DN_SG");
 const fetchData = async () => {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
@@ -276,11 +273,11 @@ const handleAddNewTicket = async () => {
     message.warning("Trùng lặp ID");
   } else {
     await addNewTicket();
-    success();
+    message.success("Thêm vé thành công");
   }
 };
 const addNewTicket = async () => {
-  const ticketRef = doc(projectFileStore, "ticket", "DN_SG_TEST");
+  const ticketRef = doc(projectFileStore, "ticket", "DN_SG");
   try {
     await updateDoc(ticketRef, {
       data: arrayUnion({
@@ -322,7 +319,7 @@ const handleUpdateTicket = async () => {
 };
 
 const updateTicket = async ticket => {
-  const ticketRef = doc(projectFileStore, "ticket", "DN_SG_TEST");
+  const ticketRef = doc(projectFileStore, "ticket", "DN_SG");
   try {
     await updateDoc(ticketRef, {
       data: base.value.data.map(item => {
@@ -349,7 +346,7 @@ const updateTicket = async ticket => {
 
 const handleDeleteItem = async itemId => {
   try {
-    const docRef = doc(projectFileStore, "ticket", "DN_SG_TEST");
+    const docRef = doc(projectFileStore, "ticket", "DN_SG");
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {

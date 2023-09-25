@@ -74,7 +74,11 @@
             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
           >
             <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
-            <span class="flex-1 ml-3 whitespace-nowrap">Đăng xuất</span>
+            <router-link
+              to="/login"
+              class="flex-1 ml-3 whitespace-nowrap"
+              >Đăng xuất</router-link
+            >
           </a>
         </li>
       </ul>

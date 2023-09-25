@@ -38,6 +38,16 @@
               <td class="px-28 uppercase font-semibold">Email</td>
               <td class="px-28 uppercase font-semibold">Họ Tên</td>
             </tr>
+            <tr
+              v-for="user in userAccount"
+              :key="user.uid"
+            >
+              <span>
+                {{ user.email }}
+                -
+                {{ user.displayName }}
+              </span>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -47,6 +57,25 @@
 
 <script setup>
 import NavAdmin from "./NavAdmin.vue";
+// import admin from "firebase-admin";
+// import serviceAccount from "../../../serviceAccount.json";
+// import { onMounted, ref } from "vue";
 
-import { getAuth } from "firebase/auth";
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
+
+// const userAccount = ref([]);
+// const getAllUser = async () => {
+//   try {
+//     const userRecords = await admin.auth().listUsers();
+//     userAccount.value = userRecords.users.map(user => user.toJSON());
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// onMounted(async () => {
+//   await getAllUser();
+// });
 </script>

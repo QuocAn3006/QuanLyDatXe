@@ -144,7 +144,17 @@
               Loading...
             </button>
           </div>
-
+          <div
+            class="flex items-center justify-center border-danger border-2 rounded py-2 mb-4 cursor-pointer hover:bg-gray-100"
+            @click="handleLoginWithGoogle()"
+          >
+            <span class="pr-4"> Login with Google Account</span>
+            <img
+              src="../../src/assets/img/google.png"
+              alt=""
+              class="w-5 h-5"
+            />
+          </div>
           <div
             class="text-left text-red-500 my-2"
             v-if="error"
@@ -187,6 +197,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useLogin } from "../composables/useLogin";
+import { useSignInWithGoogle } from "../composables/useLoginWithGoogle";
 
 import { useUser } from "../composables/useUser";
 import { doc, getDoc } from "firebase/firestore";
@@ -197,6 +208,7 @@ const password = ref("");
 
 const router = useRouter();
 const { error, login, isPending } = useLogin();
+const { signInWithGoogle, isLogin } = useSignInWithGoogle();
 
 const handleLogin = async () => {
   await login(email.value, password.value);
@@ -213,6 +225,22 @@ const handleLogin = async () => {
       router.push("/");
     }
     console.log(admin);
+  }
+};
+
+const handleLoginWithGoogle = async () => {
+  await signInWithGoogle();
+  if (!!isLogin) {
+    const docRef = doc(projectFileStore, "user", "admin");
+    const docSnap = await getDoc(docRef);
+    const admin = docSnap.data();
+    const { getUser } = useUser();
+    const { user } = getUser();
+    if (user.value.uid == admin.isAdmin) {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
   }
 };
 </script>

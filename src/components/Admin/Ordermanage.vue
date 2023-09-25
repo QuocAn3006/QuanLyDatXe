@@ -30,29 +30,27 @@
         </div>
       </div>
 
-      <div class="mt-12 flex flex-col">
+      <div class="mt-12 flex flex-col items-center">
         <table class="mx-auto border">
-          <tbody>
-            <tr>
-              <td class="px-20 uppercase font-semibold">Họ Tên</td>
-              <td class="px-20 uppercase font-semibold">Email</td>
-              <td class="px-20 uppercase font-semibold">Số điện thoại</td>
-              <td class="px-20 uppercase font-semibold">Số ghế</td>
-              <td class="px-20 uppercase font-semibold">Tổng tiền</td>
+          <tbody class="">
+            <tr class="">
+              <th class="px-20 uppercase font-semibold">Họ Tên</th>
+              <th class="px-20 uppercase font-semibold">Email</th>
+              <th class="px-20 uppercase font-semibold">Số điện thoại</th>
+              <th class="px-20 uppercase font-semibold">Số ghế</th>
+              <th class="px-20 uppercase font-semibold">Tổng tiền</th>
             </tr>
 
             <tr
               v-for="item in order"
               :key="item"
+              class=""
             >
-              <td class="px-20">{{ item.fullname }}</td>
+              <td class="px-20">{{ item.fullName }}</td>
               <td class="px-20">{{ item.email }}</td>
               <td class="px-20">{{ item.phoneNumber }}</td>
-              <td
-                v-for="x in seat"
-                :key="x"
-              >
-                {{ x }}
+              <td class="px-20">
+                {{ item.seats ? item.seats.seatLabel.join(", ") : "" }}
               </td>
               <td class="px-20">{{ item.total }}</td>
             </tr>
