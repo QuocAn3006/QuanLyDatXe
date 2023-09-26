@@ -327,13 +327,13 @@ const isSeatPayment = (c, r) => {
 };
 const getSeatImage = (c, r) => {
   if (isSeatSelected(c, r)) {
-    return "../../src/assets/img/seat_selecting.svg";
+    return "https://futabus.vn/images/icons/seat_selecting.svg";
   }
   if (isSeatPayment(c, r)) {
-    return "../../src/assets/img/seat_disabled.svg";
+    return "https://futabus.vn/images/icons/seat_selecting.svg";
   }
 
-  return "../../src/assets/img/seat_active.svg";
+  return "https://futabus.vn/images/icons/seat_active.svg";
 };
 
 const getSeatLabel = (c, r) => {
