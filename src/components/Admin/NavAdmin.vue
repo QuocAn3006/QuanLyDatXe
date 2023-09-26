@@ -37,17 +37,7 @@
             <span class="flex-1 ml-3 whitespace-nowrap">Quản lý vé xe</span>
           </a>
         </li>
-        <li>
-          <a
-            href="/manage-user"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-          >
-            <font-awesome-icon :icon="['fas', 'user-group']" />
-            <span class="flex-1 ml-3 whitespace-nowrap"
-              >Quản lý người dùng</span
-            >
-          </a>
-        </li>
+
         <li>
           <a
             href="/manage-order"
