@@ -1,4 +1,36 @@
 <template>
+  <header class="header h-[120px] mx-auto text-[13px] w-full">
+    <div class="sm:content sm:layout hidden h-20 sm:flex justify-around pt-4">
+      <router-link
+        to="/"
+        class="relative w-60 h-60"
+      >
+        <img
+          srcset="../assets/img/logo.svg"
+          alt=""
+          style="
+            position: absolute;
+            inset: 0px;
+            box-sizing: border-box;
+            padding: 0px;
+            border: none;
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            top: -222px;
+          "
+        />
+      </router-link>
+      <div class="flex items-start gap-4 text-center text-sm font-medium">
+        <div
+          class="flex h-8 w-44 cursor-pointer items-center gap-3 rounded-2xl bg-white p-2 text-black"
+        >
+          <font-awesome-icon :icon="['fas', 'circle-user']" />
+          Đăng nhập/Đăng ký
+        </div>
+      </div>
+    </div>
+  </header>
   <div class="relative pt-[360px] flex flex-col justify-center items-center">
     <div class="layout card-login flex">
       <div class="relative hidden flex-auto flex-col items-start sm:flex">
@@ -85,9 +117,10 @@
               type="text"
               class="peer block min-h-[auto] w-full rounded border-[1px] bg-transparent px-3 py-[0.32rem] leading-[1.6]"
               id="exampleFormControlInput1"
-              placeholder="Username"
+              placeholder="Email"
               v-model="email"
             />
+            <p class="text-red-500 mt-2">{{ errors.password }}</p>
           </div>
 
           <!--Password input-->
@@ -102,6 +135,7 @@
               placeholder="Password"
               v-model="password"
             />
+            <p class="text-red-500 mt-2">{{ errors.password }}</p>
           </div>
 
           <!--Submit button-->
@@ -192,9 +226,9 @@ import {
   NInput,
   NButton
 } from "naive-ui";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { useLogin } from "../composables/useLogin";
 import { useSignInWithGoogle } from "../composables/useLoginWithGoogle";
@@ -202,10 +236,12 @@ import { useSignInWithGoogle } from "../composables/useLoginWithGoogle";
 import { useUser } from "../composables/useUser";
 import { doc, getDoc } from "firebase/firestore";
 import { projectFileStore } from "../configs/firebase";
-
+import Header from "../components/Header.vue";
+const route = useRoute();
+const meta = computed(() => route.meta);
 const email = ref("");
 const password = ref("");
-
+const errors = ref({});
 const router = useRouter();
 const { error, login, isPending } = useLogin();
 const { signInWithGoogle, isLogin } = useSignInWithGoogle();
@@ -262,5 +298,11 @@ const handleLoginWithGoogle = async () => {
   height: 44px !important;
   border: 1px solid rgba(239, 82, 34, 0.3) !important;
   background: rgba(239, 82, 34, 0.05);
+}
+
+.header {
+  background-image: url("https://futabus.vn/images/banners/home_banner.png");
+  background-size: cover;
+  min-height: 180px;
 }
 </style>

@@ -1,4 +1,36 @@
 <template>
+  <header class="header h-[120px] mx-auto text-[13px] w-full">
+    <div class="sm:content sm:layout hidden h-20 sm:flex justify-around pt-4">
+      <router-link
+        to="/"
+        class="relative w-60 h-60"
+      >
+        <img
+          srcset="../assets/img/logo.svg"
+          alt=""
+          style="
+            position: absolute;
+            inset: 0px;
+            box-sizing: border-box;
+            padding: 0px;
+            border: none;
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            top: -222px;
+          "
+        />
+      </router-link>
+      <div class="flex items-start gap-4 text-center text-sm font-medium">
+        <div
+          class="flex h-8 w-44 cursor-pointer items-center gap-3 rounded-2xl bg-white p-2 text-black"
+        >
+          <font-awesome-icon :icon="['fas', 'circle-user']" />
+          Đăng nhập/Đăng ký
+        </div>
+      </div>
+    </div>
+  </header>
   <div class="relative pt-[360px] flex flex-col justify-center items-center">
     <div class="layout card-login flex">
       <div class="relative hidden flex-auto flex-col items-start sm:flex">
@@ -75,7 +107,7 @@
       <div class="mt-8 flex w-full flex-col items-center sm:w-[480px]">
         <div class="text-2xl font-medium">Đăng ký tài khoản</div>
 
-        <form @submit.prevent="handleRegister">
+        <form @submit.prevent="handleRegister()">
           <div
             class="relative mt-10"
             data-te-input-wrapper-init
@@ -87,6 +119,7 @@
               placeholder="Full Name"
               v-model="fullname"
             />
+            <p class="text-red-500">{{ errors.fullname }}</p>
           </div>
 
           <!-- email -->
@@ -186,17 +219,27 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useRegister } from "../composables/useRegister";
+import Header from "../components/Header.vue";
+const route = useRoute();
+const meta = computed(() => route.meta);
 const router = useRouter();
 const password = ref("");
 const email = ref("");
 const fullname = ref("");
-
+const err = ref("");
 const { error, register, isPending } = useRegister();
-
+const errors = ref({});
+const formValid = () => {
+  errors.value = {};
+  if (!fullname.value) {
+    errors.value.fullname = "FullName is required";
+  }
+};
 const handleRegister = async () => {
+  formValid();
   await register(fullname.value, email.value, password.value);
   if (!error.value) router.push("/login");
 };
@@ -219,5 +262,11 @@ const handleRegister = async () => {
   height: 44px !important;
   border: 1px solid rgba(239, 82, 34, 0.3) !important;
   background: rgba(239, 82, 34, 0.05);
+}
+
+.header {
+  background-image: url("https://futabus.vn/images/banners/home_banner.png");
+  background-size: cover;
+  min-height: 180px;
 }
 </style>

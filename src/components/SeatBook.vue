@@ -1,4 +1,6 @@
 <template>
+  <Header v-if="!meta.isShowHeader" />
+
   <div class="layout pb-8 sm:block">
     <div class="flex w-full flex-col gap-6 bg-white pt-0 sm:flex-row sm:pt-8">
       <div class="flex flex-col">
@@ -268,15 +270,18 @@
       </div>
     </div>
   </div>
+  <Footer v-if="!meta.isShowHeader" />
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useMessage } from "naive-ui";
 import { useUser } from "../composables/useUser";
 import useCollection from "../composables/useCollection";
 import { doc } from "firebase/firestore";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 const selectedSeat = ref([]);
 const seatPayment = ref([]);
 const row = 6;
@@ -286,12 +291,10 @@ const inputEmail = ref("");
 const inputSDT = ref("");
 const seatInfo = ref({});
 const route = useRoute();
+const meta = computed(() => route.meta);
 const date = new Date(route.query.time);
 
 const message = useMessage();
-const err = () => {
-  message.error("Không được chọn quá 5 ghế");
-};
 
 const success = () => {
   message.success("Đặt vé thành công");
@@ -330,7 +333,7 @@ const getSeatImage = (c, r) => {
     return "https://futabus.vn/images/icons/seat_selecting.svg";
   }
   if (isSeatPayment(c, r)) {
-    return "https://futabus.vn/images/icons/seat_selecting.svg";
+    return "https://futabus.vn/images/icons/seat_disabled.svg";
   }
 
   return "https://futabus.vn/images/icons/seat_active.svg";
@@ -366,7 +369,7 @@ const onSeatSelected = (c, r) => {
   } else if (selectedSeat.value.length < 5) {
     selectedSeat.value.push({ column: c, row: r, status: "selected" });
   } else {
-    err();
+    message.error("Không được chọn quá 5 ghế");
   }
 
   seatInfo.value = {
@@ -411,20 +414,15 @@ const onSubmit = async () => {
       }));
     }
     selectedSeat.value = [];
-    localStorage.setItem("seat-payment", seatPayment.value);
 
     seatPayment.value.forEach(seat => {
       const col = seat.column;
       const row = seat.row;
       if (isSeatPayment(col, row)) {
-        console.log("thanh cong");
+        getSeatImage(col, row);
       }
     });
     success();
   }
 };
-
-onMounted(() => {
-  localStorage.getItem("seat-payment");
-});
 </script>

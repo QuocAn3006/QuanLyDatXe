@@ -10,13 +10,19 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
+import { projectAuth } from "./configs/firebase";
 library.add(fab);
 library.add(fas);
 library.add(far);
 
 axios.defaults.baseURL = "http://localhost:8800";
 
-const app = createApp(App);
-app.use(router);
-app.component("font-awesome-icon", FontAwesomeIcon);
-app.mount("#app");
+let app;
+projectAuth.onAuthStateChanged(() => {
+  if (!app) {
+    app = createApp(App);
+    app.use(router);
+    app.component("font-awesome-icon", FontAwesomeIcon);
+    app.mount("#app");
+  }
+});

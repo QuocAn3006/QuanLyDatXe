@@ -15,16 +15,19 @@ async function register(fullname, email, password) {
   try {
     const res = await createUserWithEmailAndPassword(
       projectAuth,
-
       email,
       password
     );
-    if (!res) throw new Error("couldn't create new user");
+
     updateProfile(res.user, { displayName: fullname });
     return res.user;
   } catch (err) {
     if (err.code == AuthErrorCodes.EMAIL_EXISTS) {
-      error.value = "The email address is already in use by another account";
+      error.value = "Email is already used";
+    } else if (err.code == AuthErrorCodes.WEAK_PASSWORD) {
+      error.value = "Password should be at least 6 characters";
+    } else if (err.code == AuthErrorCodes.INVALID_EMAIL) {
+      error.value = "Email is invalid";
     }
   } finally {
     isPending.value = false;

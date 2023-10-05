@@ -1,4 +1,5 @@
 <template>
+  <Header v-if="!meta.isShowHeader" />
   <div class="w-full">
     <!-- search -->
     <section class="layout relative flex flex-col mt-20">
@@ -310,16 +311,22 @@
       </div>
     </section>
   </div>
+  <Footer v-if="!meta.isShowHeader" />
 </template>
 
 <script setup>
 import { NPopover, NCheckbox, useMessage } from "naive-ui";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 
 import { projectFileStore } from "../configs/firebase";
 import { doc, getDocs, collection, query, where } from "firebase/firestore";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
+
+const route = useRoute();
+const meta = computed(() => route.meta);
 const overlap = ref(false);
 const datePicker = ref("");
 const dateInPast = ref("");

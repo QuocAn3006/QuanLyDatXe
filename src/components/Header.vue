@@ -21,29 +21,25 @@
           "
         />
       </router-link>
-
-      <div
-        class="w-44 h-8 bg-white rounded-2xl p-2 flex items-center ml-1"
-        v-if="!user"
-        @click="router.push('/login')"
-      >
-        <font-awesome-icon
-          :icon="['far', 'user']"
-          class="ml-1"
-        />
-        <span class="ml-2">Đăng nhập/Đăng ký</span>
-      </div>
-
-      <div
-        v-else
-        class="font-bold text-xl text-white flex"
-      >
-        <span>{{ user.displayName }}</span>
+      <div class="flex justify-center gap-4 text-center text-sm font-medium">
         <div
-          class="ml-4 cursor-pointer"
-          @click="logout"
+          v-if="!user"
+          class="flex h-8 w-44 cursor-pointer items-center gap-3 rounded-2xl bg-white p-2 text-black"
         >
-          <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
+          <font-awesome-icon :icon="['fas', 'circle-user']" />
+          Đăng nhập/Đăng ký
+        </div>
+
+        <div
+          v-else
+          class="text-white text-xl"
+        >
+          {{ user.displayName }}
+          <font-awesome-icon
+            :icon="['fas', 'right-from-bracket']"
+            class="ml-2 cursor-pointer"
+            @click="router.push('/logout')"
+          />
         </div>
       </div>
     </div>
@@ -56,17 +52,12 @@ import { useUser } from "../composables/useUser";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
 import { projectAuth } from "../configs/firebase";
+import { onMounted } from "vue";
+
 const { getUser } = useUser();
 const { user } = getUser();
 
 const router = useRouter();
-
-const logout = () =>
-  signOut(projectAuth)
-    .then(() => {
-      router.push("/login");
-    })
-    .catch(err => console.log(err));
 </script>
 
 <style scoped>
