@@ -1,17 +1,13 @@
 <template>
   <nav-admin />
-  <div class="ml-72">
-    <canvas
-      style="
-        display: block;
-        box-sizing: border-box;
-        height: 400px;
-        width: 800px;
-      "
-      ref="chartCanvas"
-      width="800"
-      height="400"
-    ></canvas>
+  <div class="ml-72 mt-28 flex items-center justify-around">
+    <div class="relative w-[400px] h-[400px]">
+      <canvas ref="chartCanvas1"></canvas>
+    </div>
+
+    <div class="relative w-[400px] h-[400px]">
+      <canvas ref="chartCanvas2"></canvas>
+    </div>
   </div>
 </template>
 
@@ -19,149 +15,105 @@
 import NavAdmin from "../Admin/NavAdmin.vue";
 import Chart from "chart.js/auto";
 import { onMounted, ref } from "vue";
-const chartCanvas = ref(null);
-let chart;
+const chartCanvas1 = ref(null);
+const chartCanvas2 = ref(null);
+let chart1;
+let chart2;
 
 onMounted(() => {
-  const ctx = chartCanvas.value.getContext("2d");
-  chart = new Chart(ctx, config);
-  return chart;
+  const ctx1 = chartCanvas1.value.getContext("2d");
+  const ctx2 = chartCanvas2.value.getContext("2d");
+
+  chart1 = new Chart(ctx1, config1);
+  chart2 = new Chart(ctx2, config2);
+
+  return chart1, chart2;
 });
-const data = {
-  labels: [
-    "22/09/2023",
-    "23/09/2023",
-    "25/09/2023",
-    "26/09/2023",
-    "28/09/2023",
-    "30/09/2023"
-  ],
+const data1 = {
+  labels: ["Tháng 9", "Tháng 8", "Tháng 10"],
   datasets: [
     {
-      label: "Thống kê số lượng vé đặt theo ngày",
-      data: [10, 30, 20, 15, 25, 18],
-      borderColor: "red",
-      backgroundColor: "rgba(255, 0, 0, 0.5)",
-      pointStyle: "circle",
-      pointRadius: 10,
-      pointHoverRadius: 15
+      label: "Thống kê theo tháng",
+      backgroundColor: [
+        "rgb(255, 99, 132)",
+        "rgb(54, 162, 235)",
+        "rgb(255, 205, 86)"
+      ],
+      data: [72, 17, 11],
+      hoverOffset: 4
     }
   ]
 };
 
-const config = {
-  type: "line",
-  data: data,
+const data2 = {
+  labels: ["Quý 1", "Quý 2", "Quý 3"],
+  datasets: [
+    {
+      label: "Thống kê theo năm",
+      backgroundColor: [
+        "rgb(255, 99, 132)",
+        "rgb(54, 162, 235)",
+        "rgb(255, 205, 86)"
+      ],
+      data: [72, 17, 11],
+      hoverOffset: 4
+    }
+  ]
+};
+
+const config1 = {
+  type: "pie",
+  data: data1,
   options: {
     responsive: true,
     plugins: {
+      legend: {
+        position: "top"
+      },
       title: {
         display: true,
-        text: "Point Style: false"
+        text: "Thống Kê Theo Tháng"
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || "";
+
+            let value = context.dataset.data[context.dataIndex];
+            return label + ": " + value + "%";
+          }
+        }
       }
-    }
+    },
+    scales: {}
   }
 };
 
-const actions = [
-  {
-    name: "pointStyle: circle (default)",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "circle";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: cross",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "cross";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: crossRot",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "crossRot";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: dash",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "dash";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: line",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "line";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: rect",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "rect";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: rectRounded",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "rectRounded";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: rectRot",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "rectRot";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: star",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "star";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: triangle",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = "triangle";
-      });
-      chart.update();
-    }
-  },
-  {
-    name: "pointStyle: false",
-    handler: chart => {
-      chart.data.datasets.forEach(dataset => {
-        dataset.pointStyle = false;
-      });
-      chart.update();
-    }
+const config2 = {
+  type: "pie",
+  data: data2,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top"
+      },
+      title: {
+        display: true,
+        text: "Thống Kê Theo Năm"
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || "";
+
+            let value = context.dataset.data[context.dataIndex];
+            return label + ": " + value + "%";
+          }
+        }
+      }
+    },
+    scales: {}
   }
-];
+};
 </script>

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
 import { projectAuth } from "../configs/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 
 const error = ref(null);
 const isPending = ref(false);
@@ -19,6 +19,8 @@ async function login(email, password) {
       error.value = "Email is invalid !! ";
     } else if (err.code == "auth/invalid-email") {
       error.value = "Email is invalid !! ";
+    } else if (err.code == AuthErrorCodes.TOO_MANY_ATTEMPTS_TRY_LATER) {
+      error.value = "Something failed !! Please Refresh the website";
     }
   } finally {
     isPending.value = false;

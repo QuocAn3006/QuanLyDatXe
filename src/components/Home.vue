@@ -178,17 +178,17 @@
               <span>Loại xe</span>
               <div class="mt-4 flex flex-wrap gap-2">
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Ghế
                 </div>
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Giường
                 </div>
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   linmousine
                 </div>
@@ -199,17 +199,17 @@
               <span>Hàng ghế</span>
               <div class="mt-4 flex flex-wrap gap-2">
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Hàng đầu
                 </div>
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Hàng giữa
                 </div>
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Hàng cuối
                 </div>
@@ -220,12 +220,12 @@
               <span>Tầng</span>
               <div class="mt-4 flex flex-wrap gap-2">
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Tầng trên
                 </div>
                 <div
-                  class="cursor-pointer rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
+                  class="cursor-not-allowed rounded-md border bg-white py-1 px-3 text-[14px] font-normal border-[#DDE2E8]"
                 >
                   Tầng dưới
                 </div>
@@ -277,12 +277,12 @@
                 <div class="mt-3 flex justify-between text-[13px] font-normal">
                   <div class="flex-1">
                     <span class="text-[15px] font-medium"
-                      >Bến Xe Trung Tâm {{ tick.from }}</span
+                      >Bến Xe {{ tick.from }}</span
                     >
                   </div>
                   <div class="flex-1 text-right">
                     <span class="text-[15px] font-medium"
-                      >Bến Xe Trung Tâm {{ tick.to }}</span
+                      >Bến Xe {{ tick.to }}</span
                     >
                   </div>
                 </div>
@@ -338,12 +338,12 @@ const ticketsResult = ref([]);
 const isPending = ref(false);
 const selectedProvince1 = ref(null);
 const selectedProvince2 = ref(null);
-const ProvincesApi = "https://vn-public-apis.fpo.vn/provinces";
+const ProvincesApi = "https://provinces.open-api.vn/api/p/";
 const router = useRouter();
 
 const message = useMessage();
-axios.get(`${ProvincesApi}/getAll?limit=-1`).then(res => {
-  filterProvinces.value = res.data.data.data;
+axios.get(`${ProvincesApi}`).then(res => {
+  filterProvinces.value = res.data;
 });
 
 const selectProvince1 = item => {

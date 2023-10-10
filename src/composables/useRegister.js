@@ -28,6 +28,8 @@ async function register(fullname, email, password) {
       error.value = "Password should be at least 6 characters";
     } else if (err.code == AuthErrorCodes.INVALID_EMAIL) {
       error.value = "Email is invalid";
+    } else if (err.code == AuthErrorCodes.TOO_MANY_ATTEMPTS_TRY_LATER) {
+      error.value = "Please Refresh and Try Again";
     }
   } finally {
     isPending.value = false;

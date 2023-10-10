@@ -248,7 +248,7 @@ const { signInWithGoogle, isLogin } = useSignInWithGoogle();
 
 const handleLogin = async () => {
   await login(email.value, password.value);
-  if (!!error) {
+  if (!error.value) {
     // router.push("/");
     const docRef = doc(projectFileStore, "user", "admin");
     const docSnap = await getDoc(docRef);

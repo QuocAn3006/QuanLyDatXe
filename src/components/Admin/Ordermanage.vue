@@ -44,15 +44,15 @@
             <tr
               v-for="item in order"
               :key="item"
-              class=""
+              class="text-center"
             >
-              <td class="px-20">{{ item.fullName }}</td>
-              <td class="px-20">{{ item.email }}</td>
-              <td class="px-20">{{ item.phoneNumber }}</td>
-              <td class="px-20">
+              <td class="">{{ item.fullName }}</td>
+              <td class="">{{ item.email }}</td>
+              <td class="">{{ item.phoneNumber }}</td>
+              <td class="">
                 {{ item.seats ? item.seats.seatLabel.join(", ") : "" }}
               </td>
-              <td class="px-20">{{ item.total }}</td>
+              <td class="">{{ item.total }}</td>
             </tr>
           </tbody>
         </table>

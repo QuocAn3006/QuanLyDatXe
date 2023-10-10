@@ -45,11 +45,12 @@
             <tr
               v-for="item in base.data"
               :key="item"
+              class="text-center"
             >
-              <td class="px-28">{{ item.id }}</td>
-              <td class="px-28">{{ item.from }}</td>
-              <td class="px-28">{{ item.to }}</td>
-              <td class="px-28">{{ item.time }}</td>
+              <td class="">{{ item.id }}</td>
+              <td class="">{{ item.from }}</td>
+              <td class="">{{ item.to }}</td>
+              <td class="">{{ item.time }}</td>
             </tr>
           </tbody>
         </table>
