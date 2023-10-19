@@ -55,7 +55,7 @@ const data2 = {
         "rgb(54, 162, 235)",
         "rgb(255, 205, 86)"
       ],
-      data: [72, 17, 11],
+      data: [5, 10, 85],
       hoverOffset: 4
     }
   ]
